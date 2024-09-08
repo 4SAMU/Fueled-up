@@ -1,6 +1,7 @@
 contract;
 
 use std::hash::Hash;
+// use std::{ asset::{transfer}};
 
 storage {
     /// The initial points awarded to a user.
@@ -37,6 +38,10 @@ storage {
 
     /// 1 day period.
     apy_1: u64 = 10,
+
+    // /// fl_contract_address
+    // fl_contract_id: ContractId = ContractId::from(0xe5122d4b6a69d79c02382aedc754ef043d70e46ebb8b2e3e71149c4de8605f87),
+
 }
 
 abi RewardPoints {
@@ -83,6 +88,11 @@ abi RewardPoints {
     /// Retrieves the points awarded for buying an NFT.
     #[storage(read)]
     fn buying_points() -> u64;
+
+    // /// transfer fl tokens using fl contract
+    // #[storage(read, write)]
+    // fn transfer_fl_tokens(to: Identity, amount: u64);   
+
 }
 
 impl RewardPoints for Contract {
@@ -181,5 +191,13 @@ impl RewardPoints for Contract {
     #[storage(read)]
     fn buying_points() -> u64 {
         storage.buying_points.read()
-    }       
+    }    
+
+
+    // /// transfer fl tokens using fl contract
+    // #[storage(read, write)]
+    // fn transfer_fl_tokens(to: Identity, amount: u64) {
+    //     let fl_contract_id = storage.fl_contract_id.read();
+    //     transfer(fl_contract_id, to, amount);        
+    // }   
 }
