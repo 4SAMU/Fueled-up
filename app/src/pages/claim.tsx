@@ -6,11 +6,29 @@ import {
   MiniBtns,
 } from "@/components/main-page/main-page-styles";
 import { InputField } from "@/components/mining-page/mining-styles";
+import { useFlDropsContext } from "@/contexts/flDrops";
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+// Array for the percentage buttons
+const percentages = [25, 50, 75, 100];
 
 const Claim = () => {
+  // Access the context
+  const { flDropsBalance } = useFlDropsContext();
+
+  // Local state for claim amount
   const [claimAmount, setClaimAmount] = useState("");
+
+  const isClaimAllowed =
+    Number(claimAmount) >= 10000 && Number(claimAmount) <= flDropsBalance;
+
+  // Function to handle percentage input and update the claim amount
+  const handlePercentageInput = (percentage: number) => {
+    const calculatedAmount = (flDropsBalance * (percentage / 100)).toFixed(2);
+    setClaimAmount(calculatedAmount);
+  };
+
   return (
     <div>
       <HeadMetaData pageTitle="FL Ecosystem | Claim Your Tokens" />
@@ -48,15 +66,23 @@ const Claim = () => {
           <label>Amount to Claim</label>
           <InputField
             sx={{ marginTop: "10px" }}
-            placeholder="Amount to Claim"
+            placeholder="minimum to claim, 10000 fl-drops!"
             value={claimAmount}
             onChange={(e) => setClaimAmount(e.target.value)}
           />
-          <FlexRowItems sx={{ width: "100%", justifyContent: "space-around" }}>
-            <MiniBtns>25%</MiniBtns>
-            <MiniBtns>50%</MiniBtns>
-            <MiniBtns>75%</MiniBtns>
-            <MiniBtns>100%</MiniBtns>
+          <FlexRowItems sx={{ justifyContent: "space-around" }}>
+            {percentages.map((percentage) => {
+              const claimAmount = flDropsBalance * (percentage / 100);
+              return (
+                <MiniBtns
+                  key={percentage}
+                  onClick={() => handlePercentageInput(percentage)}
+                  disabled={claimAmount < 10000} // Disable buttons based on percentage
+                >
+                  {percentage}%
+                </MiniBtns>
+              );
+            })}
           </FlexRowItems>
           <PrimaryButton
             sx={{
@@ -65,7 +91,7 @@ const Claim = () => {
               fontSize: "14px",
               mt: "20px",
             }}
-            disabled={!claimAmount || Number(claimAmount) <= 0}
+            disabled={!isClaimAllowed} // Disable the claim button if conditions are not met
           >
             Claim
           </PrimaryButton>

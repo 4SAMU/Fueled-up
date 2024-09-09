@@ -6,6 +6,7 @@ import "react-alice-carousel/lib/alice-carousel.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { FuelProvider } from "@fuels/react";
 import { defaultConnectors } from "@fuels/connectors";
+import FlDropsProvider from "@/contexts/flDrops";
 
 // Types for page and layout props
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -33,11 +34,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <>
       {/* <QueryClientProvider client={queryClient}>
-        <FuelProvider
-          fuelConfig={{ connectors: defaultConnectors({ devMode: false }) }}
-        > */}
-          <>{getLayout(<Component {...pageProps} />)}</>
-        {/* </FuelProvider>
+      <FuelProvider
+      fuelConfig={{ connectors: defaultConnectors({ devMode: false }) }}
+      > */}
+      <FlDropsProvider>
+        {getLayout(<Component {...pageProps} />)}
+      </FlDropsProvider>
+      {/* </FuelProvider>
       </QueryClientProvider> */}
     </>
   );
