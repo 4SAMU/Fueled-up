@@ -8,7 +8,7 @@ interface HeadMetaDataProps {
 
 let title = "FL Ecosystem | Home";
 let DESCRIPTION = "FL Ecosystem";
-let LOGO_URL = "/logo.png";
+let LOGO_URL = "/favicon.ico";
 
 const HeadMetaData: React.FC<HeadMetaDataProps> = ({ pageTitle }) => {
   const router = useRouter();

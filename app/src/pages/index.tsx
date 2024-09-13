@@ -1,22 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GetStarted from "@/components/get-started";
 import DefaultLayout from "@/components/layouts";
 import HeadMetaData from "@/components/headMetadata";
+import { useCustomFuelHook } from "@/contexts/useFuelContext";
+import { useRouter } from "next/router";
 
 export default function GettingStarted() {
-  const [showgetStarted, setShowGetStarted] = useState(true);
+  const { isWalletConnected, walletAddress } = useCustomFuelHook();
+  const router = useRouter();
 
-  const handleGetStarted = () => {
-    setShowGetStarted(!showgetStarted);
-
-    //save state in local storage
-    // localStorage.setItem("showGetStarted", JSON.stringify(!showgetStarted));
-  };
+  //router to /home if wallet is connected
+  useEffect(() => {
+    if (isWalletConnected) {
+      router.push("/home");
+    }
+  }, [isWalletConnected, router]);
 
   return (
     <>
       <HeadMetaData pageTitle="FL Ecosystem | Getting Started" />
-      <DefaultLayout>{showgetStarted && <GetStarted />}</DefaultLayout>
+      <DefaultLayout>
+        <GetStarted />
+      </DefaultLayout>
     </>
   );
 }

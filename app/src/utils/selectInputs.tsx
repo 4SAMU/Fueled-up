@@ -33,9 +33,9 @@ const StakePeriodSelect = ({
       sx={{
         "&.MuiAutocomplete-root": {
           backgroundColor: "transparent",
-          "& fieldset": { borderColor: "#1c1f22" },
+          "& fieldset": { borderColor: "#707070" },
           "&:hover fieldset, &.Mui-focused fieldset": {
-            borderColor: "#1c1f22",
+            borderColor: "#46aa40",
           },
           "& .MuiOutlinedInput-input": { padding: "0 !important" },
           ".MuiAutocomplete-input": {
@@ -50,7 +50,7 @@ const StakePeriodSelect = ({
             fontSize: "14px",
             fontWeight: "300",
           },
-          svg: { color: "#707070" },
+          svg: { color: "#46aa40" },
         },
       }}
       options={options}

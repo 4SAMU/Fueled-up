@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { HowITWorksContainer } from "./get-started-styles";
 import { Box, ClickAwayListener } from "@mui/material";
 import { PrimaryButton } from "../layouts/layout-styles";
 import Link from "next/link";
+import { Fuel } from "fuels";
+import { useFuel } from "@fuels/react";
+import { useCustomFuelHook } from "@/contexts/useFuelContext";
+import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
 interface ConnectWalletProps {
@@ -19,6 +23,37 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({
   setConnectModal,
 }) => {
   const router = useRouter();
+  //context
+  const {
+    fuel,
+    FuelWalletConnectorLoaded,
+    connectWallet,
+    disconnectWallet,
+    isWalletConnected,
+  } = useCustomFuelHook();
+
+  const handleWalletConnection = async () => {
+    try {
+      if (!isWalletConnected) {
+        const connected = await connectWallet();
+        if (connected) {
+          // close modal if wallet connected successfully
+          onClose();
+          router.push("/home");
+        }
+      } else {
+        const disconnected = await disconnectWallet();
+        if (disconnected) {
+          // close modal if wallet disconnected successfully
+          onClose();
+        }
+      }
+    } catch (error) {
+      console.error("Error handling wallet connection:", error);
+      toast.error("Error occurred, please try again");
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -71,9 +106,10 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({
                 height: "35px",
                 fontWeight: "400",
               }}
-              onClick={() => router.push("/home")}
+              onClick={() => handleWalletConnection()}
+              disabled={!FuelWalletConnectorLoaded}
             >
-              Connect Wallet
+              {!isWalletConnected ? "Connect Wallet" : "Disconnect Wallet"}
             </PrimaryButton>
           </Box>
         </HowITWorksContainer>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GetStartedContainer, HowITWorksContainer } from "./get-started-styles";
 import { Box } from "@mui/material";
 import { PrimaryButton } from "../layouts/layout-styles";
@@ -6,8 +6,18 @@ import ConnectWallet from "./connect-wallet";
 import Link from "next/link";
 
 const GetStarted = () => {
-  const [isConnected, setIsConnected] = React.useState(false);
-  const [connectModal, setConnectModal] = React.useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [connectModal, setConnectModal] = useState(false);
+
+  const [showgetStarted, setShowGetStarted] = useState(true);
+
+  const handleGetStarted = () => {
+    setShowGetStarted(!showgetStarted);
+
+    //save state in local storage
+    // localStorage.setItem("showGetStarted", JSON.stringify(!showgetStarted));
+  };
+
   return (
     <GetStartedContainer>
       <h1>Welcome to the FL Ecosystem</h1>
@@ -65,7 +75,7 @@ const GetStarted = () => {
           onClose={() => setConnectModal(false)}
           isConnected={false}
           setIsConnected={setIsConnected}
-          connectModal={false}
+          connectModal={connectModal}
           setConnectModal={setConnectModal}
         />
       )}

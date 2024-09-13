@@ -31,9 +31,9 @@ export const PrimaryButton = styled(Button)(({}) => ({
   textTransform: "none",
   backgroundColor: "#46aa40",
   color: "#fff",
-  height: "45px",
   fontSize: "16px",
-  fontWeight: "700",
+  height: "35px",
+  fontWeight: "400",
 
   ":disabled": {
     backgroundColor: "#1c1f22",

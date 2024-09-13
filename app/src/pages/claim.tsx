@@ -6,7 +6,7 @@ import {
   MiniBtns,
 } from "@/components/main-page/main-page-styles";
 import { InputField } from "@/components/mining-page/mining-styles";
-import { useFlDropsContext } from "@/contexts/flDrops";
+import { useFlDropsContext } from "@/contexts/useFlDrops";
 import { Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 

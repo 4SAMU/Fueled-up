@@ -13,19 +13,25 @@ import {
 import { InputField } from "@/components/mining-page/mining-styles";
 import { PrimaryButton } from "@/components/layouts/layout-styles";
 import { numberWithCommas } from "@/utils/numberWithCommas";
-import { useFlDropsContext } from "@/contexts/flDrops";
+import { useFlDropsContext } from "@/contexts/useFlDrops";
 import StakePeriodSelect from "@/utils/selectInputs";
+import { useCustomFuelHook } from "@/contexts/useFuelContext";
+import { slicedWalletAddress } from "@/utils/slicedWalletAddress";
+import WalletConnectModal from "@/utils/walletConnectModal";
 
 const percentages = [25, 50, 75, 100];
 
 const Home = () => {
   // Access the context
   const { flDropsBalance } = useFlDropsContext();
+  const { walletAddress, isWalletConnected, connectWallet, disconnectWallet } =
+    useCustomFuelHook();
 
   // Local state for stake amount
   const [stakeAmount, setStakeAmount] = useState("");
   const [stakePeriod, setStakePeriod] = useState("");
   // const [stakePeriodInNumbers, setStakePeriodInNumbers] = useState(0);
+  const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
 
   // Function to handle percentage input and update the staking amount
   const handlePercentageInput = (percentage: number) => {
@@ -51,13 +57,19 @@ const Home = () => {
     console.log("Stake amount: ", stakeAmount);
   };
 
+  const handleDisconnectWallet = async () => {
+    await disconnectWallet();
+  };
+
   return (
     <div>
       <HeadMetaData pageTitle="FL Ecosystem | Home" />
       <DefaultLayout bottomNav>
         <MainPageContainer>
           <FlexRowItems sx={{ justifyContent: "flex-end", width: "100%" }}>
-            <ConnectedWalletAddress>0x5rf...543e</ConnectedWalletAddress>
+            <ConnectedWalletAddress onClick={handleDisconnectWallet}>
+              {slicedWalletAddress(walletAddress)}
+            </ConnectedWalletAddress>
           </FlexRowItems>
 
           <Fl_Drop_Container sx={{ mt: 5 }}>
@@ -78,7 +90,7 @@ const Home = () => {
             />
             <label style={{ marginTop: "10px" }}>Stake Amount</label>
             <InputField
-              sx={{ border: "1px solid #1c1f22", margin: "auto" }}
+              sx={{ margin: "auto" }}
               placeholder="Amount to Stake"
               value={stakeAmount}
               onChange={(e) => setStakeAmount(e.target.value)}
@@ -106,6 +118,11 @@ const Home = () => {
             <Box sx={{ height: 100 }} />
           </StakingContainer>
         </MainPageContainer>
+        {!isWalletConnected && (
+          <WalletConnectModal
+            onClose={() => setShowWalletConnectModal(false)}
+          />
+        )}
       </DefaultLayout>
     </div>
   );
