@@ -1,4 +1,4 @@
-import { Box, Button, styled } from "@mui/material";
+import { Box, Button, IconButton, keyframes, styled } from "@mui/material";
 
 export const MainPageContainer = styled(Box)(({}) => ({
   display: "flex",
@@ -66,6 +66,22 @@ export const FlexRowItems = styled(Box)(({}) => ({
   flexDirection: "row",
 }));
 
+export const FlexColumnItems = styled(Box)(({}) => ({
+  display: "flex",
+  flexDirection: "column",
+}));
+
+// Define the sparkle animation
+const sparkleAnimation = keyframes`
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+`;
+
+// Styled component with sparkle effect
 export const ConnectedWalletAddress = styled(Button)(({}) => ({
   textTransform: "none",
   borderRadius: "25px",
@@ -77,6 +93,26 @@ export const ConnectedWalletAddress = styled(Button)(({}) => ({
   fontSize: "14px",
   fontWeight: "300",
   letterSpacing: "1px",
+  position: "relative",
+  overflow: "hidden", // Ensure the sparkle stays within the button
+  zIndex: 1,
+  gap: "5px",
+
+  // Sparkle effect (using gradient background with #46aa40)
+  backgroundImage:
+    "linear-gradient(120deg, rgba(70, 170, 64, 0) 30%, rgba(70, 170, 64, 0.1) 50%, rgba(70, 170, 64, 0.0) 70%)",
+  backgroundSize: "200% auto",
+  animation: `${sparkleAnimation} 2s linear infinite`,
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: "inherit",
+    zIndex: -1, // Ensure it stays behind the text
+  },
 }));
 
 export const StakingContainer = styled(Box)(({}) => ({
@@ -127,5 +163,12 @@ export const MiniBtns = styled(Button)(({}) => ({
   ":disabled": {
     backgroundColor: "#1c1f22",
     color: "#707070",
+  },
+}));
+
+export const StyledIconButton = styled(IconButton)(({}) => ({
+  transition: "all 0.3s ease",
+  "&:hover": {
+    backgroundColor: "rgba(70, 170, 64, 0.2)",
   },
 }));
